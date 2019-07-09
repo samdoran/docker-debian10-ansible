@@ -12,6 +12,7 @@ RUN apt-get update \
         dirmngr \
         gnupg2 \
         libcap2-bin \
+        procps \
         python-apt \
         python-pip \
         python-setuptools \
@@ -22,7 +23,7 @@ RUN apt-get update \
         sudo \
         systemd \
         systemd-cron \
-    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/lib/apt/lists/* /tmp/*  /var/tmp/* \
     && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
     && apt-get clean
 
@@ -34,6 +35,14 @@ RUN apt-add-repository 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu trus
     && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
     && apt-get clean \
     && touch -m -t 201701010000 /var/lib/apt/lists/
+
+RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
+    /etc/systemd/system/*.wants/* \
+    /lib/systemd/system/local-fs.target.wants/* \
+    /lib/systemd/system/sockets.target.wants/*udev* \
+    /lib/systemd/system/sockets.target.wants/*initctl* \
+    /lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup* \
+    /lib/systemd/system/systemd-update-utmp*
 
 RUN echo -e "localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python3" > /etc/ansible/hosts
 

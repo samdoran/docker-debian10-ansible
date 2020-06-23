@@ -13,9 +13,6 @@ RUN apt-get update \
         gnupg2 \
         libcap2-bin \
         procps \
-        python-apt \
-        python-pip \
-        python-setuptools \
         python3-apt \
         python3-pip \
         python3-setuptools \
@@ -27,14 +24,7 @@ RUN apt-get update \
     && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
     && apt-get clean
 
-RUN apt-add-repository 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main' \
-    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367 \
-    && apt-get update \
-    && apt-get install -y --allow-unauthenticated ansible \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
-    && apt-get clean \
-    && touch -m -t 201701010000 /var/lib/apt/lists/
+RUN pip3 install ansible q
 
 RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
     /etc/systemd/system/*.wants/* \
